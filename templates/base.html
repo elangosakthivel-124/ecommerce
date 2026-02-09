@@ -1,24 +1,73 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Ecommerce</title>
-
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MyShop - Ecommerce{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    {% block extra_css %}{% endblock %}
 </head>
+<body class="d-flex flex-column min-vh-100">
 
-<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{% url 'home' %}">MyShop</a>
 
-<nav class="navbar navbar-dark bg-dark">
-<div class="container">
-<a class="navbar-brand" href="/">MyShop</a>
-</div>
-</nav>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-<div class="container mt-4">
-{% block content %}
-{% endblock %}
-</div>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <!-- Left side (optional menu) -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Categories</a>
+                    </li>
+                </ul>
 
+                <!-- Right side: Auth + Cart -->
+                <div class="d-flex align-items-center gap-3">
+                    {% if user.is_authenticated %}
+                        <span class="text-light">Hi, {{ user.username }}</span>
+                        <a href="{% url 'logout' %}" class="btn btn-sm btn-outline-danger">Logout</a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-sm btn-outline-success">Login</a>
+                        <a href="{% url 'register' %}" class="btn btn-sm btn-outline-primary">Register</a>
+                    {% endif %}
+
+                    <!-- Optional: Cart icon (you can connect later) -->
+                    <a href="#" class="text-light text-decoration-none position-relative">
+                        🛒
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main content area -->
+    <main class="container mt-4 flex-grow-1">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Optional footer -->
+    <footer class="bg-dark text-light text-center py-3 mt-auto">
+        <div class="container">
+            <p class="mb-0">© {% now "Y" %} MyShop. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    
+    {% block extra_js %}{% endblock %}
 </body>
 </html>
