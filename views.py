@@ -45,3 +45,11 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect('login')
+
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def home(request):
+    products = Product.objects.all()
+    return render(request, 'home.html', {'products': products})
+
