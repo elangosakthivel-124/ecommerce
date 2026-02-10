@@ -1,21 +1,21 @@
 {% extends 'base.html' %}
-
 {% block content %}
-
-<h3>Products</h3>
 
 <div class="row">
 
-{% for product in products %}
+{% for p in products %}
 
 <div class="col-md-3">
 <div class="card mb-4">
 
-<img src="{{ product.image.url }}" class="card-img-top">
+<img src="{{ p.image.url }}" class="card-img-top">
 
 <div class="card-body">
-<h5>{{ product.name }}</h5>
-<p>₹{{ product.price }}</p>
+<h5>{{ p.name }}</h5>
+<p>₹{{ p.price }}</p>
+
+<a href="/product/{{p.id}}/" class="btn btn-sm btn-dark">View</a>
+
 </div>
 
 </div>
