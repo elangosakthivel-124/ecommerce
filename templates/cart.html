@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>Cart</h3>
+
+<table class="table">
+
+<tr>
+<th>Product</th>
+<th>Qty</th>
+<th>Subtotal</th>
+<th></th>
+</tr>
+
+{% for p in products %}
+
+<tr>
+<td>{{ p.name }}</td>
+<td>{{ p.qty }}</td>
+<td>₹{{ p.subtotal }}</td>
+<td><a href="/remove/{{p.id}}/" class="btn btn-sm btn-danger">X</a></td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+<h4>Total: ₹{{ total }}</h4>
+
+{% endblock %}
