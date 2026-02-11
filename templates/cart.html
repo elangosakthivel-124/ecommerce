@@ -5,26 +5,31 @@
 
 <table class="table">
 
-<tr>
-<th>Product</th>
-<th>Qty</th>
-<th>Subtotal</th>
-<th></th>
-</tr>
-
 {% for p in products %}
 
 <tr>
 <td>{{ p.name }}</td>
-<td>{{ p.qty }}</td>
+
+<td>
+<a href="/subqty/{{p.id}}/">-</a>
+{{ p.qty }}
+<a href="/addqty/{{p.id}}/">+</a>
+</td>
+
 <td>₹{{ p.subtotal }}</td>
-<td><a href="/remove/{{p.id}}/" class="btn btn-sm btn-danger">X</a></td>
+
+<td>
+<a href="/remove/{{p.id}}/" class="btn btn-sm btn-danger">X</a>
+</td>
+
 </tr>
 
 {% endfor %}
 
 </table>
 
-<h4>Total: ₹{{ total }}</h4>
+<h4>Total ₹{{ total }}</h4>
+
+<a href="/checkout/" class="btn btn-success">Checkout</a>
 
 {% endblock %}
