@@ -1,29 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
-from django.contrib import messages
-from .models import Product
-
-
-@login_required
-def home(request):
-    products = Product.objects.all()
-    return render(request, 'home.html', {'products': products})
-
-
-@login_required
-def product_detail(request, id):
-    product = get_object_or_404(Product, id=id)
-    return render(request, 'product_detail.html', {'product': product})
-
-
-@login_required
-def add_to_cart(request, id):
-    cart = request.session.get('cart', {})
-    cart[str(id)] = cart.get(str(id), 0) + 1
-    request.session['cart'] = cart
-    return redirect('cart')
+from .models import Product, Order, OrderItem
 
 
 @login_required
@@ -35,7 +10,7 @@ def cart(request):
     for pid, qty in cart.items():
         product = Product.objects.get(id=pid)
         product.qty = qty
-        product.subtotal = qty * float(product.price)
+        product.subtotal = qty * product.price
         total += product.subtotal
         products.append(product)
 
@@ -43,40 +18,42 @@ def cart(request):
 
 
 @login_required
-def remove_cart(request, id):
+def add_qty(request, id):
     cart = request.session.get('cart', {})
-    if str(id) in cart:
-        del cart[str(id)]
+    cart[str(id)] += 1
     request.session['cart'] = cart
     return redirect('cart')
 
 
-# AUTH (Day 2)
+@login_required
+def sub_qty(request, id):
+    cart = request.session.get('cart', {})
+    if cart[str(id)] > 1:
+        cart[str(id)] -= 1
+    request.session['cart'] = cart
+    return redirect('cart')
 
-def register_user(request):
+
+@login_required
+def checkout(request):
+    cart = request.session.get('cart', {})
+    total = 0
+
+    for pid, qty in cart.items():
+        product = Product.objects.get(id=pid)
+        total += qty * product.price
+
     if request.method == "POST":
-        User.objects.create_user(
-            username=request.POST['username'],
-            email=request.POST['email'],
-            password=request.POST['password']
-        )
-        return redirect('login')
-    return render(request, 'register.html')
+        order = Order.objects.create(user=request.user, total=total)
 
+        for pid, qty in cart.items():
+            OrderItem.objects.create(
+                order=order,
+                product=Product.objects.get(id=pid),
+                quantity=qty
+            )
 
-def login_user(request):
-    if request.method == "POST":
-        user = authenticate(
-            request,
-            username=request.POST['username'],
-            password=request.POST['password']
-        )
-        if user:
-            login(request, user)
-            return redirect('home')
-    return render(request, 'login.html')
+        request.session['cart'] = {}
+        return redirect('home')
 
-
-def logout_user(request):
-    logout(request)
-    return redirect('login')
+    return render(request, 'checkout.html', {'total': total})
