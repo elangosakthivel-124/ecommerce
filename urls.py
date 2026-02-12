@@ -12,7 +12,10 @@ urlpatterns = [
     path('login/', views.login_user, name='login'),
     path('logout/', views.logout_user, name='logout'),
     path('addqty/<int:id>/', views.add_qty, name='addqty'),
-path('subqty/<int:id>/', views.sub_qty, name='subqty'),
-path('checkout/', views.checkout, name='checkout'),
+    path('subqty/<int:id>/', views.sub_qty, name='subqty'),
+    path('checkout/', views.checkout, name='checkout'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('order/<int:id>/', views.order_detail, name='order_detail'),
+
 
 ]
