@@ -57,3 +57,16 @@ def checkout(request):
         return redirect('home')
 
     return render(request, 'checkout.html', {'total': total})
+
+@login_required
+def dashboard(request):
+    orders = Order.objects.filter(user=request.user).order_by('-created')
+    return render(request, 'dashboard.html', {'orders': orders})
+
+
+@login_required
+def order_detail(request, id):
+    order = Order.objects.get(id=id, user=request.user)
+    items = order.items.all()
+    return render(request, 'order_detail.html', {'order': order, 'items': items})
+
