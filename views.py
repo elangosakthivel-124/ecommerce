@@ -70,3 +70,22 @@ def order_detail(request, id):
     items = order.items.all()
     return render(request, 'order_detail.html', {'order': order, 'items': items})
 
+@login_required
+def payment(request, id):
+    order = Order.objects.get(id=id, user=request.user)
+
+    if request.method == "POST":
+        # Dummy payment success
+        order.status = 'paid'
+        order.save()
+        return redirect('success', id=order.id)
+
+    return render(request, 'payment.html', {'order': order})
+
+
+@login_required
+def success(request, id):
+    order = Order.objects.get(id=id, user=request.user)
+    return render(request, 'success.html', {'order': order})
+
+
