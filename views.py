@@ -87,5 +87,28 @@ def payment(request, id):
 def success(request, id):
     order = Order.objects.get(id=id, user=request.user)
     return render(request, 'success.html', {'order': order})
+@login_required
+def checkout(request):
+    cart = request.session.get('cart', {})
+    total = 0
+
+    for pid, qty in cart.items():
+        product = Product.objects.get(id=pid)
+        total += qty * product.price
+
+    if request.method == "POST":
+        order = Order.objects.create(user=request.user, total=total)
+
+        for pid, qty in cart.items():
+            OrderItem.objects.create(
+                order=order,
+                product=Product.objects.get(id=pid),
+                quantity=qty
+            )
+
+        request.session['cart'] = {}
+        return redirect('payment', id=order.id)
+
+    return render(request, 'checkout.html', {'total': total})
 
 
