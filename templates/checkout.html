@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>Checkout</h3>
+
+<form method="POST">
+{% csrf_token %}
+
+<input class="form-control mb-2" name="phone" placeholder="Phone">
+<textarea class="form-control mb-2" name="address" placeholder="Address"></textarea>
+
+<h4>Total: ₹{{ total }}</h4>
+
+<button class="btn btn-dark">Place Order</button>
+
+</form>
+
+{% endblock %}
