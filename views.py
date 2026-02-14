@@ -131,5 +131,13 @@ def admin_orders(request):
     orders = Order.objects.all().order_by('-created')
     return render(request, 'admin_orders.html', {'orders': orders})
 
+ShippingAddress.objects.create(
+    order=order,
+    full_name=request.user.username,
+    phone=request.POST.get('phone', ''),
+    address=request.POST.get('address', '')
+)
+
+
 
 
