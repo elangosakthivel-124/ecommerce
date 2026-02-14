@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>All Orders</h3>
+
+<table class="table">
+
+<tr>
+<th>ID</th>
+<th>User</th>
+<th>Total</th>
+<th>Status</th>
+</tr>
+
+{% for o in orders %}
+
+<tr>
+<td>{{ o.id }}</td>
+<td>{{ o.user }}</td>
+<td>₹{{ o.total }}</td>
+<td>{{ o.status }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}
