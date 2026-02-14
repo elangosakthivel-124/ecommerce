@@ -72,6 +72,12 @@
     <a href="/cart/" class="btn btn-warning">Cart</a>
     <a href="/dashboard/" class="btn btn-info">Dashboard</a>
 
+    <a href="/profile/" class="btn btn-secondary">Profile</a>
+
+{% if user.is_staff %}
+<a href="/admin-orders/" class="btn btn-warning">Admin</a>
+{% endif %}
+
 
 </body>
 </html>
