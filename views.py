@@ -111,4 +111,25 @@ def checkout(request):
 
     return render(request, 'checkout.html', {'total': total})
 
+@login_required
+def profile(request):
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
+    if request.method == "POST":
+        profile.phone = request.POST['phone']
+        profile.address = request.POST['address']
+        profile.save()
+
+    return render(request, 'profile.html', {'profile': profile})
+
+
+@login_required
+def admin_orders(request):
+    if not request.user.is_staff:
+        return redirect('home')
+
+    orders = Order.objects.all().order_by('-created')
+    return render(request, 'admin_orders.html', {'orders': orders})
+
+
 
